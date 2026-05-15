@@ -1,0 +1,82 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User profile information and role.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "user"] },
+        "photoURL": { "type": "string" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Permit": {
+      "title": "Permit Application",
+      "description": "A request for a permit.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "userDisplayName": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "typeId": { "type": "string" },
+        "typeName": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "data": { "type": "object" },
+        "requirements": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "archived": { "type": "boolean" },
+        "adminNotes": { "type": "string" }
+      },
+      "required": ["userId", "typeId", "status", "createdAt"]
+    },
+    "PermitType": {
+      "title": "Permit Type Definition",
+      "description": "Configuration for a type of permit.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "requirements": { "type": "array" }
+      },
+      "required": ["name"]
+    },
+    "Notification": {
+      "title": "Real-time Notification",
+      "description": "A notification for a user or admin.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "message": { "type": "string" },
+        "type": { "type": "string" },
+        "read": { "type": "boolean" },
+        "permitId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "message", "read", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Stored user profiles."
+    },
+    "/permits/{permitId}": {
+      "schema": "Permit",
+      "description": "Stored permit applications."
+    },
+    "/permitTypes/{typeId}": {
+      "schema": "PermitType",
+      "description": "Available permit types and their requirements."
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "Stored notifications for users."
+    }
+  }
+}
